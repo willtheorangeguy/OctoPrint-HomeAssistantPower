@@ -1,0 +1,2 @@
+# No runtime dependencies: OctoPrint already ships `requests`, which is all this
+# plugin needs. Development/test extras live in setup.py under extras_require.

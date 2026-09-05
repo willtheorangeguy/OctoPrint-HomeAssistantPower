@@ -1,0 +1,21 @@
+<div class="ha-power-sidebar">
+    <div class="ha-power-sidebar-row">
+        <span class="ha-power-sidebar-key">Now</span>
+        <span class="ha-power-sidebar-value" data-bind="text: printerPowerText"></span>
+    </div>
+
+    <div class="ha-power-sidebar-row" data-bind="visible: energyTracking">
+        <span class="ha-power-sidebar-key">This print</span>
+        <span class="ha-power-sidebar-value" data-bind="text: currentPrintEnergyText"></span>
+    </div>
+
+    <div class="ha-power-sidebar-row" data-bind="visible: lastPrintEnergy">
+        <span class="ha-power-sidebar-key">Last print</span>
+        <span class="ha-power-sidebar-value" data-bind="text: lastPrintEnergyText"></span>
+    </div>
+
+    <div class="ha-power-sidebar-note" data-bind="visible: energyNotCumulative">
+        The configured energy sensor is not a cumulative meter, so per-print
+        totals are unavailable.
+    </div>
+</div>

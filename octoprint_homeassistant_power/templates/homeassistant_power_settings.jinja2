@@ -1,0 +1,328 @@
+<form class="form-horizontal ha-power-settings">
+
+    <h4>Home Assistant connection</h4>
+
+    <div class="control-group">
+        <label class="control-label">Server URL</label>
+        <div class="controls">
+            <input type="text" class="input-xxlarge"
+                   placeholder="https://homeassistant.local:8123"
+                   data-bind="value: settings.plugins.homeassistant_power.base_url">
+            <span class="help-block">
+                Base URL of your Home Assistant instance, with no trailing path.
+                Use HTTPS unless Home Assistant is on the same host.
+            </span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Access token</label>
+        <div class="controls">
+            <input type="password" class="input-xxlarge" autocomplete="new-password"
+                   data-bind="value: settings.plugins.homeassistant_power.access_token">
+            <span class="help-block">
+                A long-lived access token from your Home Assistant profile page
+                (bottom of <em>Profile &rarr; Security</em>). Only OctoPrint
+                administrators can read this value back.
+            </span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox"
+                       data-bind="checked: settings.plugins.homeassistant_power.verify_certificate">
+                Verify the TLS certificate
+            </label>
+            <span class="help-block">
+                Uncheck only if Home Assistant uses a self-signed certificate.
+            </span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Poll interval</label>
+        <div class="controls">
+            <div class="input-append">
+                <input type="number" min="5" class="input-mini"
+                       data-bind="value: settings.plugins.homeassistant_power.poll_interval">
+                <span class="add-on">s</span>
+            </div>
+            <span class="help-block">How often to refresh entity states. Minimum 5s.</span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div class="controls">
+            <button class="btn" data-bind="click: testConnection, enable: !testing()">
+                <i class="fas fa-plug"></i> Test connection
+            </button>
+            <button class="btn" data-bind="click: loadEntities, enable: !loadingEntities()">
+                <i class="fas fa-sync"></i> Load entities from Home Assistant
+            </button>
+            <span class="help-inline" data-bind="text: testResult, css: testResultClass"></span>
+        </div>
+    </div>
+
+    <hr>
+    <h4>Entities</h4>
+    <p class="help-block">
+        Every entity listed here can be switched from the OctoPrint navbar.
+        Power and energy sensors are optional; use <em>Detect</em> to look for
+        the sensors that belong to a plug.
+    </p>
+
+    <datalist id="ha_power_controllable_list"
+              data-bind="foreach: controllableEntities">
+        <option data-bind="attr: {value: entity_id}, text: name"></option>
+    </datalist>
+    <datalist id="ha_power_sensor_list" data-bind="foreach: sensorEntities">
+        <option data-bind="attr: {value: entity_id}, text: name"></option>
+    </datalist>
+
+    <table class="table table-condensed ha-power-entity-table">
+        <thead>
+            <tr>
+                <th>Entity ID</th>
+                <th>Label</th>
+                <th class="ha-power-col-narrow" title="Show in the navbar dropdown">Navbar</th>
+                <th class="ha-power-col-narrow" title="Ask before switching this entity off">Confirm</th>
+                <th>Power sensor</th>
+                <th>Energy sensor</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: entities">
+            <tr>
+                <td>
+                    <input type="text" class="input-medium" list="ha_power_controllable_list"
+                           placeholder="switch.printer_plug"
+                           data-bind="value: entity_id">
+                </td>
+                <td>
+                    <input type="text" class="input-medium" placeholder="Printer"
+                           data-bind="value: label">
+                </td>
+                <td class="ha-power-col-narrow">
+                    <input type="checkbox" data-bind="checked: show_in_navbar">
+                </td>
+                <td class="ha-power-col-narrow">
+                    <input type="checkbox" data-bind="checked: confirm_off">
+                </td>
+                <td>
+                    <input type="text" class="input-medium" list="ha_power_sensor_list"
+                           placeholder="optional"
+                           data-bind="value: power_sensor">
+                </td>
+                <td>
+                    <input type="text" class="input-medium" list="ha_power_sensor_list"
+                           placeholder="optional"
+                           data-bind="value: energy_sensor">
+                </td>
+                <td class="ha-power-row-actions">
+                    <button class="btn btn-mini" title="Detect the power and energy sensors for this entity"
+                            data-bind="click: $parent.detectSensors">
+                        Detect
+                    </button>
+                    <button class="btn btn-mini btn-danger" title="Remove"
+                            data-bind="click: $parent.removeEntity">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button class="btn" data-bind="click: addEntity">
+        <i class="fas fa-plus"></i> Add entity
+    </button>
+
+    <div class="control-group" style="margin-top: 15px;">
+        <label class="control-label">Printer entity</label>
+        <div class="controls">
+            <select data-bind="options: configuredEntityIds,
+                               optionsCaption: 'None - disable printer automation',
+                               value: settings.plugins.homeassistant_power.printer_entity"></select>
+            <span class="help-block">
+                The entity that powers the printer itself. Automation and the
+                energy panel apply to this entity.
+            </span>
+        </div>
+    </div>
+
+    <hr>
+    <h4>Power on</h4>
+
+    <div class="control-group">
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox"
+                       data-bind="checked: settings.plugins.homeassistant_power.auto_on.auto_connect">
+                Connect to the printer after powering it on
+            </label>
+            <span class="help-block">
+                OctoPrint cannot start a print while disconnected, so powering on
+                is triggered from the navbar button rather than automatically.
+                With this enabled, OctoPrint retries the serial connection until
+                the printer answers.
+            </span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Connect timeout</label>
+        <div class="controls">
+            <div class="input-append">
+                <input type="number" min="0" class="input-mini"
+                       data-bind="value: settings.plugins.homeassistant_power.auto_on.connect_timeout">
+                <span class="add-on">s</span>
+            </div>
+            <span class="help-block">How long to keep retrying the connection.</span>
+        </div>
+    </div>
+
+    <hr>
+    <h4>Power off after a print</h4>
+
+    <div class="control-group">
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox"
+                       data-bind="checked: settings.plugins.homeassistant_power.auto_off.enabled">
+                Turn the printer entity off when a print ends
+            </label>
+        </div>
+    </div>
+
+    <div data-bind="visible: settings.plugins.homeassistant_power.auto_off.enabled">
+        <div class="control-group">
+            <label class="control-label">Trigger on</label>
+            <div class="controls">
+                <label class="checkbox inline">
+                    <input type="checkbox"
+                           data-bind="checked: settings.plugins.homeassistant_power.auto_off.on_done">
+                    Completed
+                </label>
+                <label class="checkbox inline">
+                    <input type="checkbox"
+                           data-bind="checked: settings.plugins.homeassistant_power.auto_off.on_failed">
+                    Failed
+                </label>
+                <label class="checkbox inline">
+                    <input type="checkbox"
+                           data-bind="checked: settings.plugins.homeassistant_power.auto_off.on_cancelled">
+                    Cancelled
+                </label>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Cancel window</label>
+            <div class="controls">
+                <div class="input-append">
+                    <input type="number" min="0" class="input-mini"
+                           data-bind="value: settings.plugins.homeassistant_power.auto_off.grace_period">
+                    <span class="add-on">s</span>
+                </div>
+                <span class="help-block">
+                    Countdown shown before anything happens, so you can cancel
+                    the power-off from the navbar.
+                </span>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Cool down to</label>
+            <div class="controls">
+                <div class="input-append">
+                    <input type="number" min="0" class="input-mini"
+                           data-bind="value: settings.plugins.homeassistant_power.auto_off.cooldown_temp">
+                    <span class="add-on">&deg;C</span>
+                </div>
+                <label class="checkbox" style="margin-top: 5px;">
+                    <input type="checkbox"
+                           data-bind="checked: settings.plugins.homeassistant_power.auto_off.include_bed">
+                    Wait for the bed as well as the hotend
+                </label>
+                <span class="help-block">
+                    Power is only cut once the printer has cooled below this
+                    temperature. Set to 0 to skip the cooldown wait.
+                </span>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Cooldown timeout</label>
+            <div class="controls">
+                <div class="input-append">
+                    <input type="number" min="0" class="input-mini"
+                           data-bind="value: settings.plugins.homeassistant_power.auto_off.cooldown_timeout">
+                    <span class="add-on">s</span>
+                </div>
+                <span class="help-block">
+                    Hard cap on the cooldown wait; power is cut once it expires.
+                </span>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox"
+                           data-bind="checked: settings.plugins.homeassistant_power.auto_off.disconnect_first">
+                    Disconnect from the printer before cutting power
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    <h4>Energy</h4>
+
+    <div class="control-group">
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox"
+                       data-bind="checked: settings.plugins.homeassistant_power.energy.enabled">
+                Read power and energy sensors
+            </label>
+        </div>
+    </div>
+
+    <div data-bind="visible: settings.plugins.homeassistant_power.energy.enabled">
+        <div class="control-group">
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox"
+                           data-bind="checked: settings.plugins.homeassistant_power.energy.show_in_navbar">
+                    Show live wattage in the navbar dropdown
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox"
+                           data-bind="checked: settings.plugins.homeassistant_power.energy.show_sidebar">
+                    Show the energy panel in the sidebar
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox"
+                           data-bind="checked: settings.plugins.homeassistant_power.energy.track_per_print">
+                    Record how much energy each print used
+                </label>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Electricity price</label>
+            <div class="controls">
+                <input type="text" class="input-mini"
+                       data-bind="value: settings.plugins.homeassistant_power.energy.currency">
+                <input type="number" step="0.001" min="0" class="input-small"
+                       data-bind="value: settings.plugins.homeassistant_power.energy.cost_per_kwh">
+                <span class="help-block">
+                    Currency symbol and price per kWh. Leave the price at 0 to
+                    hide cost figures.
+                </span>
+            </div>
+        </div>
+    </div>
+</form>

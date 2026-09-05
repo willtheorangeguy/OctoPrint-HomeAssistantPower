@@ -1,0 +1,121 @@
+/* Home Assistant Power - OctoPrint plugin styles. */
+
+/* --- navbar -------------------------------------------------------------- */
+
+.ha-power-menu {
+    min-width: 300px;
+    padding: 6px 0;
+}
+
+.ha-power-menu li.ha-power-row,
+.ha-power-menu li.ha-power-autooff,
+.ha-power-menu li.ha-power-printer,
+.ha-power-menu li.ha-power-error,
+.ha-power-menu li.ha-power-empty {
+    padding: 6px 14px;
+    white-space: normal;
+}
+
+.ha-power-menu li.ha-power-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ha-power-state {
+    flex: 0 0 auto;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: #999;
+}
+
+.ha-power-state-on {
+    background-color: #4a4;
+}
+
+.ha-power-state-off {
+    background-color: #bbb;
+}
+
+.ha-power-state-unavailable,
+.ha-power-state-unknown {
+    background-color: #d90;
+}
+
+.ha-power-label {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ha-power-watts {
+    flex: 0 0 auto;
+    color: #888;
+    font-size: 0.85em;
+    font-variant-numeric: tabular-nums;
+}
+
+.ha-power-actions {
+    flex: 0 0 auto;
+}
+
+.ha-power-error {
+    color: #b94a48;
+}
+
+.ha-power-empty {
+    color: #888;
+}
+
+.ha-power-autooff div {
+    margin-bottom: 6px;
+}
+
+.ha-power-badge {
+    margin-left: 4px;
+    padding: 1px 5px;
+    border-radius: 8px;
+    background-color: #d90;
+    color: #fff;
+    font-size: 0.75em;
+    font-variant-numeric: tabular-nums;
+}
+
+/* --- sidebar ------------------------------------------------------------- */
+
+.ha-power-sidebar-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 0;
+}
+
+.ha-power-sidebar-key {
+    color: #888;
+}
+
+.ha-power-sidebar-value {
+    font-variant-numeric: tabular-nums;
+}
+
+.ha-power-sidebar-note {
+    margin-top: 6px;
+    color: #888;
+    font-size: 0.85em;
+}
+
+/* --- settings ------------------------------------------------------------ */
+
+.ha-power-entity-table input[type="text"] {
+    margin-bottom: 0;
+}
+
+.ha-power-entity-table .ha-power-col-narrow {
+    width: 60px;
+    text-align: center;
+}
+
+.ha-power-entity-table .ha-power-row-actions {
+    white-space: nowrap;
+}

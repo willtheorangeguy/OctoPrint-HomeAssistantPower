@@ -1,0 +1,55 @@
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Home Assistant power control">
+    <i class="fas fa-plug"></i>
+    <span class="ha-power-badge" data-bind="visible: autoOffActive, text: autoOffBadge"></span>
+</a>
+<ul class="dropdown-menu ha-power-menu">
+    <!-- ko if: connectionError -->
+    <li class="ha-power-error">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span data-bind="text: connectionError"></span>
+    </li>
+    <!-- /ko -->
+
+    <!-- ko ifnot: navbarEntities().length -->
+    <li class="ha-power-empty">
+        <span data-bind="visible: !connectionError()">
+            No entities configured yet &mdash; add them in Settings &rarr; Home Assistant Power.
+        </span>
+    </li>
+    <!-- /ko -->
+
+    <!-- ko foreach: navbarEntities -->
+    <li class="ha-power-row">
+        <span class="ha-power-state" data-bind="css: stateClass" title="Entity state"></span>
+        <span class="ha-power-label" data-bind="text: label, attr: {title: entity_id}"></span>
+        <span class="ha-power-watts" data-bind="visible: showPower, text: powerText"></span>
+        <div class="btn-group ha-power-actions">
+            <button class="btn btn-mini" data-bind="click: $parent.turnOn, enable: $parent.canControl">
+                On
+            </button>
+            <button class="btn btn-mini" data-bind="click: $parent.turnOff, enable: $parent.canControl">
+                Off
+            </button>
+        </div>
+    </li>
+    <!-- /ko -->
+
+    <!-- ko if: autoOffActive -->
+    <li class="divider"></li>
+    <li class="ha-power-autooff">
+        <div data-bind="text: autoOffText"></div>
+        <button class="btn btn-mini btn-danger" data-bind="click: cancelAutoOff">
+            Cancel power off
+        </button>
+    </li>
+    <!-- /ko -->
+
+    <!-- ko if: printerEntity -->
+    <li class="divider"></li>
+    <li class="ha-power-printer">
+        <button class="btn btn-mini btn-block" data-bind="click: powerOnPrinter, enable: canControl">
+            <i class="fas fa-power-off"></i> Power on printer &amp; connect
+        </button>
+    </li>
+    <!-- /ko -->
+</ul>
