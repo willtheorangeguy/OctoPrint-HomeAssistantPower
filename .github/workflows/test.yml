@@ -19,6 +19,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install OctoPrint
-          python -m pip install -e ".[develop]"
+          # setup.py imports OctoPrint's build helpers.
+          python -m pip install --no-build-isolation -e ".[develop]"
       - name: Run tests
-        run: pytest
+        run: python -m pytest
