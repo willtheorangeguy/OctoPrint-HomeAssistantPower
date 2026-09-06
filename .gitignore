@@ -25,3 +25,14 @@ Thumbs.db
 
 # Local dev
 *.local
+
+# Documentation build artifacts and shared design-system assets
+site/
+_docs_out/
+.mkdocs-shared/
+docs/stylesheets/
+docs/javascript/
+docs/images/favicon.svg
+overrides/main.html
+overrides/partials/
+overrides/.icons/

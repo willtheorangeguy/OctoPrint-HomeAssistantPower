@@ -1,0 +1,38 @@
+# Project identity and navigation; theme and toolchain come from the shared repository.
+INHERIT: .mkdocs-shared/shared/mkdocs.base.yml
+
+site_name: OctoPrint-HomeAssistantPower
+site_description: Control Home Assistant smart plugs from OctoPrint, automate post-print power-off, and track per-print energy.
+site_author: willtheorangeguy
+site_url: https://williamvdg.me/OctoPrint-HomeAssistantPower/
+repo_url: https://github.com/willtheorangeguy/OctoPrint-HomeAssistantPower
+repo_name: willtheorangeguy/OctoPrint-HomeAssistantPower
+edit_uri: edit/main/docs/
+copyright: Copyright &copy; William Vandergraaf
+
+nav:
+  - OctoPrint-HomeAssistantPower: index.md
+  - Getting started: getting-started.md
+  - Installation: installation.md
+  - Usage: usage.md
+  - Configuration: configuration.md
+  - Energy tracking: energy.md
+  - Troubleshooting: troubleshooting.md
+  - FAQ: faq.md
+  - Development:
+      - Architecture: architecture.md
+      - Development: development.md
+      - API: api.md
+      - Python reference: python-reference.md
+      - Testing: testing.md
+      - CI/CD: ci-cd.md
+      - Roadmap: roadmap.md
+  - About:
+      - License: license.md
+      - Contributing: https://github.com/willtheorangeguy/.github/blob/main/CONTRIBUTING.md
+      - Code of conduct: https://github.com/willtheorangeguy/.github/blob/main/CODE_OF_CONDUCT.md
+      - Security: https://github.com/willtheorangeguy/.github/blob/main/SECURITY.md
+
+exclude_docs: |
+  docs.instructions.md
+  internal/
