@@ -270,10 +270,22 @@ $(function () {
             self.entities.remove(row);
         };
 
+        // Settings commands carry the values currently in the form, so the
+        // dialog can talk to Home Assistant before anything has been saved.
+        function connectionPayload(extra) {
+            var settings = pluginSettings();
+            var payload = {
+                base_url: settings.base_url(),
+                access_token: settings.access_token(),
+                verify_certificate: settings.verify_certificate()
+            };
+            return _.extend(payload, extra || {});
+        }
+
         self.detectSensors = function (row) {
             var entityId = row.entity_id();
             if (!entityId) return;
-            command("detect_sensors", {entity_id: entityId}).done(function (response) {
+            command("detect_sensors", connectionPayload({entity_id: entityId})).done(function (response) {
                 if (!response || response.ok === false) {
                     reportFailure(response);
                     return;
@@ -295,11 +307,7 @@ $(function () {
             self.testing(true);
             self.testResult("Testing…");
             self.testOk(true);
-            command("test_connection", {
-                base_url: pluginSettings().base_url(),
-                access_token: pluginSettings().access_token(),
-                verify_certificate: pluginSettings().verify_certificate()
-            }).done(function (response) {
+            command("test_connection", connectionPayload()).done(function (response) {
                 self.testOk(!!(response && response.ok));
                 self.testResult(
                     response && response.ok
@@ -316,7 +324,7 @@ $(function () {
 
         self.loadEntities = function () {
             self.loadingEntities(true);
-            command("list_entities").done(function (response) {
+            command("list_entities", connectionPayload()).done(function (response) {
                 if (!response || response.ok === false) {
                     reportFailure(response);
                     return;

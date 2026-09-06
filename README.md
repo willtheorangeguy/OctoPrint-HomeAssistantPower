@@ -66,7 +66,7 @@ Install via the bundled [Plugin Manager](https://docs.octoprint.org/en/master/bu
 or manually using this URL:
 
 ```
-https://github.com/willtheorangeguy/OctoPrint-HomeAssistantPower/archive/main.zip
+https://github.com/willtheorangeguy/OctoPrint-HomeAssistantPower/archive/v0.1.1.zip
 ```
 
 ## Setup

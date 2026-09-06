@@ -12,7 +12,7 @@ date: 2026-09-05
 
 homepage: https://github.com/willtheorangeguy/OctoPrint-HomeAssistantPower
 source: https://github.com/willtheorangeguy/OctoPrint-HomeAssistantPower
-archive: https://github.com/willtheorangeguy/OctoPrint-HomeAssistantPower/archive/v0.1.0.zip
+archive: https://github.com/willtheorangeguy/OctoPrint-HomeAssistantPower/archive/v0.1.1.zip
 
 tags:
 - power

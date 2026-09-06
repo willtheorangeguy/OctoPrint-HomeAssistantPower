@@ -3,6 +3,7 @@
 
 from __future__ import absolute_import, unicode_literals
 
+import contextlib
 import threading
 
 import flask
@@ -415,8 +416,35 @@ class HomeAssistantPowerPlugin(
     def _command_cancel_auto_off(self, data):
         return flask.jsonify(ok=self._auto_off.cancel("user request"))
 
+    @contextlib.contextmanager
+    def _settings_client(self, data):
+        """A client built from the settings dialog's current values.
+
+        The dialog needs to reach Home Assistant before anything has been saved
+        -- having Test connection succeed and Load entities then complain that
+        nothing is configured is the obvious trap. When the request carries no
+        connection details, fall back to the saved settings.
+        """
+        base_url = (data.get("base_url") or "").strip()
+        if not base_url:
+            yield self.client
+            return
+
+        client = HomeAssistantClient(
+            base_url,
+            data.get("access_token") or self._settings.get(["access_token"]),
+            verify_certificate=data.get("verify_certificate", True),
+            timeout=self._settings.get_int(["request_timeout"]) or 5,
+            logger=self._logger,
+        )
+        try:
+            yield client
+        finally:
+            client.close()
+
     def _command_list_entities(self, data):
-        all_states = self.client.get_all_states()
+        with self._settings_client(data) as client:
+            all_states = client.get_all_states()
         controllable = []
         sensors = []
         for entity_id, state in sorted(all_states.items()):
@@ -435,21 +463,13 @@ class HomeAssistantPowerPlugin(
         return flask.jsonify(ok=True, controllable=controllable, sensors=sensors)
 
     def _command_test_connection(self, data):
-        client = HomeAssistantClient(
-            data.get("base_url"),
-            data.get("access_token") or self._settings.get(["access_token"]),
-            verify_certificate=data.get("verify_certificate", True),
-            timeout=self._settings.get_int(["request_timeout"]) or 5,
-            logger=self._logger,
-        )
-        try:
+        with self._settings_client(data) as client:
             message = client.test_connection()
-        finally:
-            client.close()
         return flask.jsonify(ok=True, message=message)
 
     def _command_detect_sensors(self, data):
-        all_states = self.client.get_all_states()
+        with self._settings_client(data) as client:
+            all_states = client.get_all_states()
         found = detect_sensors(data["entity_id"], all_states)
         return flask.jsonify(ok=True, **found)
 
