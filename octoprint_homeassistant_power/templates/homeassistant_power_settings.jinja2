@@ -7,7 +7,7 @@
         <div class="controls">
             <input type="text" class="input-xxlarge"
                    placeholder="https://homeassistant.local:8123"
-                   data-bind="value: settings.plugins.homeassistant_power.base_url">
+                   data-bind="value: pluginSettings.base_url">
             <span class="help-block">
                 Base URL of your Home Assistant instance, with no trailing path.
                 Use HTTPS unless Home Assistant is on the same host.
@@ -19,7 +19,7 @@
         <label class="control-label">Access token</label>
         <div class="controls">
             <input type="password" class="input-xxlarge" autocomplete="new-password"
-                   data-bind="value: settings.plugins.homeassistant_power.access_token">
+                   data-bind="value: pluginSettings.access_token">
             <span class="help-block">
                 A long-lived access token from your Home Assistant profile page
                 (bottom of <em>Profile &rarr; Security</em>). Only OctoPrint
@@ -32,7 +32,7 @@
         <div class="controls">
             <label class="checkbox">
                 <input type="checkbox"
-                       data-bind="checked: settings.plugins.homeassistant_power.verify_certificate">
+                       data-bind="checked: pluginSettings.verify_certificate">
                 Verify the TLS certificate
             </label>
             <span class="help-block">
@@ -46,7 +46,7 @@
         <div class="controls">
             <div class="input-append">
                 <input type="number" min="5" class="input-mini"
-                       data-bind="value: settings.plugins.homeassistant_power.poll_interval">
+                       data-bind="value: pluginSettings.poll_interval">
                 <span class="add-on">s</span>
             </div>
             <span class="help-block">How often to refresh entity states. Minimum 5s.</span>
@@ -55,10 +55,10 @@
 
     <div class="control-group">
         <div class="controls">
-            <button class="btn" data-bind="click: testConnection, enable: !testing()">
+            <button type="button" class="btn" data-bind="click: testConnection, enable: !testing()">
                 <i class="fas fa-plug"></i> Test connection
             </button>
-            <button class="btn" data-bind="click: loadEntities, enable: !loadingEntities()">
+            <button type="button" class="btn" data-bind="click: loadEntities, enable: !loadingEntities()">
                 <i class="fas fa-sync"></i> Load entities from Home Assistant
             </button>
             <span class="help-inline" data-bind="text: testResult, css: testResultClass"></span>
@@ -121,11 +121,11 @@
                            data-bind="value: energy_sensor">
                 </td>
                 <td class="ha-power-row-actions">
-                    <button class="btn btn-mini" title="Detect the power and energy sensors for this entity"
+                    <button type="button" class="btn btn-mini" title="Detect the power and energy sensors for this entity"
                             data-bind="click: $parent.detectSensors">
                         Detect
                     </button>
-                    <button class="btn btn-mini btn-danger" title="Remove"
+                    <button type="button" class="btn btn-mini btn-danger" title="Remove"
                             data-bind="click: $parent.removeEntity">
                         <i class="fas fa-trash"></i>
                     </button>
@@ -134,16 +134,20 @@
         </tbody>
     </table>
 
-    <button class="btn" data-bind="click: addEntity">
+    <button type="button" class="btn" data-bind="click: addEntity">
         <i class="fas fa-plus"></i> Add entity
     </button>
 
     <div class="control-group" style="margin-top: 15px;">
         <label class="control-label">Printer entity</label>
         <div class="controls">
+            <!-- valueAllowUnset keeps the stored entity selected even before the
+                 options array has been populated; without it Knockout resets the
+                 setting to the caption and the choice is lost on save. -->
             <select data-bind="options: configuredEntityIds,
                                optionsCaption: 'None - disable printer automation',
-                               value: settings.plugins.homeassistant_power.printer_entity"></select>
+                               value: pluginSettings.printer_entity,
+                               valueAllowUnset: true"></select>
             <span class="help-block">
                 The entity that powers the printer itself. Automation and the
                 energy panel apply to this entity.
@@ -158,7 +162,7 @@
         <div class="controls">
             <label class="checkbox">
                 <input type="checkbox"
-                       data-bind="checked: settings.plugins.homeassistant_power.auto_on.auto_connect">
+                       data-bind="checked: pluginSettings.auto_on.auto_connect">
                 Connect to the printer after powering it on
             </label>
             <span class="help-block">
@@ -175,7 +179,7 @@
         <div class="controls">
             <div class="input-append">
                 <input type="number" min="0" class="input-mini"
-                       data-bind="value: settings.plugins.homeassistant_power.auto_on.connect_timeout">
+                       data-bind="value: pluginSettings.auto_on.connect_timeout">
                 <span class="add-on">s</span>
             </div>
             <span class="help-block">How long to keep retrying the connection.</span>
@@ -189,29 +193,29 @@
         <div class="controls">
             <label class="checkbox">
                 <input type="checkbox"
-                       data-bind="checked: settings.plugins.homeassistant_power.auto_off.enabled">
+                       data-bind="checked: pluginSettings.auto_off.enabled">
                 Turn the printer entity off when a print ends
             </label>
         </div>
     </div>
 
-    <div data-bind="visible: settings.plugins.homeassistant_power.auto_off.enabled">
+    <div data-bind="visible: pluginSettings.auto_off.enabled">
         <div class="control-group">
             <label class="control-label">Trigger on</label>
             <div class="controls">
                 <label class="checkbox inline">
                     <input type="checkbox"
-                           data-bind="checked: settings.plugins.homeassistant_power.auto_off.on_done">
+                           data-bind="checked: pluginSettings.auto_off.on_done">
                     Completed
                 </label>
                 <label class="checkbox inline">
                     <input type="checkbox"
-                           data-bind="checked: settings.plugins.homeassistant_power.auto_off.on_failed">
+                           data-bind="checked: pluginSettings.auto_off.on_failed">
                     Failed
                 </label>
                 <label class="checkbox inline">
                     <input type="checkbox"
-                           data-bind="checked: settings.plugins.homeassistant_power.auto_off.on_cancelled">
+                           data-bind="checked: pluginSettings.auto_off.on_cancelled">
                     Cancelled
                 </label>
             </div>
@@ -222,7 +226,7 @@
             <div class="controls">
                 <div class="input-append">
                     <input type="number" min="0" class="input-mini"
-                           data-bind="value: settings.plugins.homeassistant_power.auto_off.grace_period">
+                           data-bind="value: pluginSettings.auto_off.grace_period">
                     <span class="add-on">s</span>
                 </div>
                 <span class="help-block">
@@ -237,12 +241,12 @@
             <div class="controls">
                 <div class="input-append">
                     <input type="number" min="0" class="input-mini"
-                           data-bind="value: settings.plugins.homeassistant_power.auto_off.cooldown_temp">
+                           data-bind="value: pluginSettings.auto_off.cooldown_temp">
                     <span class="add-on">&deg;C</span>
                 </div>
                 <label class="checkbox" style="margin-top: 5px;">
                     <input type="checkbox"
-                           data-bind="checked: settings.plugins.homeassistant_power.auto_off.include_bed">
+                           data-bind="checked: pluginSettings.auto_off.include_bed">
                     Wait for the bed as well as the hotend
                 </label>
                 <span class="help-block">
@@ -257,7 +261,7 @@
             <div class="controls">
                 <div class="input-append">
                     <input type="number" min="0" class="input-mini"
-                           data-bind="value: settings.plugins.homeassistant_power.auto_off.cooldown_timeout">
+                           data-bind="value: pluginSettings.auto_off.cooldown_timeout">
                     <span class="add-on">s</span>
                 </div>
                 <span class="help-block">
@@ -270,7 +274,7 @@
             <div class="controls">
                 <label class="checkbox">
                     <input type="checkbox"
-                           data-bind="checked: settings.plugins.homeassistant_power.auto_off.disconnect_first">
+                           data-bind="checked: pluginSettings.auto_off.disconnect_first">
                     Disconnect from the printer before cutting power
                 </label>
             </div>
@@ -284,28 +288,28 @@
         <div class="controls">
             <label class="checkbox">
                 <input type="checkbox"
-                       data-bind="checked: settings.plugins.homeassistant_power.energy.enabled">
+                       data-bind="checked: pluginSettings.energy.enabled">
                 Read power and energy sensors
             </label>
         </div>
     </div>
 
-    <div data-bind="visible: settings.plugins.homeassistant_power.energy.enabled">
+    <div data-bind="visible: pluginSettings.energy.enabled">
         <div class="control-group">
             <div class="controls">
                 <label class="checkbox">
                     <input type="checkbox"
-                           data-bind="checked: settings.plugins.homeassistant_power.energy.show_in_navbar">
+                           data-bind="checked: pluginSettings.energy.show_in_navbar">
                     Show live wattage in the navbar dropdown
                 </label>
                 <label class="checkbox">
                     <input type="checkbox"
-                           data-bind="checked: settings.plugins.homeassistant_power.energy.show_sidebar">
+                           data-bind="checked: pluginSettings.energy.show_sidebar">
                     Show the energy panel in the sidebar
                 </label>
                 <label class="checkbox">
                     <input type="checkbox"
-                           data-bind="checked: settings.plugins.homeassistant_power.energy.track_per_print">
+                           data-bind="checked: pluginSettings.energy.track_per_print">
                     Record how much energy each print used
                 </label>
             </div>
@@ -315,9 +319,9 @@
             <label class="control-label">Electricity price</label>
             <div class="controls">
                 <input type="text" class="input-mini"
-                       data-bind="value: settings.plugins.homeassistant_power.energy.currency">
+                       data-bind="value: pluginSettings.energy.currency">
                 <input type="number" step="0.001" min="0" class="input-small"
-                       data-bind="value: settings.plugins.homeassistant_power.energy.cost_per_kwh">
+                       data-bind="value: pluginSettings.energy.cost_per_kwh">
                 <span class="help-block">
                     Currency symbol and price per kWh. Leave the price at 0 to
                     hide cost figures.

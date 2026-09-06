@@ -115,6 +115,11 @@ class HomeAssistantPowerPlugin(
 
     # ---------------------------------------------------------- TemplatePlugin
 
+    def is_template_autoescaped(self):
+        # The templates emit no pre-rendered markup, so autoescaping is safe and
+        # is what OctoPrint 1.13 will enforce globally anyway.
+        return True
+
     def get_template_configs(self):
         return [
             # The navbar entry is a dropdown, so the wrapper <li> needs the
@@ -308,6 +313,11 @@ class HomeAssistantPowerPlugin(
         timer.start()
 
     # --------------------------------------------------------------------- API
+
+    def is_api_protected(self):
+        # Reject unauthenticated requests outright; individual commands then
+        # check the specific permission they need.
+        return True
 
     def get_api_commands(self):
         return {

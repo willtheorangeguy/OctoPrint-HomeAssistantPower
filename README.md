@@ -31,6 +31,25 @@ reason to leave the OctoPrint tab.
   explicit confirmation, plug control is a separate OctoPrint permission, and
   the access token is only ever readable by administrators.
 
+## Screenshots
+
+Every configured entity gets a state dot, live wattage and on/off buttons in the
+navbar dropdown:
+
+![The navbar dropdown listing three smart plugs with their states and live wattage](docs/img/navbar.png)
+
+After a print, a cancellable countdown runs before the printer is powered off:
+
+![A countdown in the navbar offering to cancel the power off](docs/img/autooff.png)
+
+The sidebar panel shows live draw and what the last print consumed:
+
+![The sidebar energy panel showing live watts and the last print's kWh](docs/img/sidebar.png)
+
+Entities, automation and energy options all live in one settings pane:
+
+![The plugin settings dialog showing the entity table and connection options](docs/img/settings.png)
+
 ## Requirements
 
 - OctoPrint 1.5.0 or newer

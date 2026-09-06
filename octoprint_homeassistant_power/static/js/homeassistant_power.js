@@ -58,10 +58,18 @@ $(function () {
             var text = kwh.toFixed(3) + " kWh";
             var cfg = energySettings();
             var price = parseFloat(cfg.cost_per_kwh);
-            if (!isNaN(price) && price > 0) {
+            // Suppress a cost that rounds to zero -- "($0.00)" reads as a bug.
+            if (!isNaN(price) && price > 0 && kwh * price >= 0.005) {
                 text += " (" + (cfg.currency || "") + (kwh * price).toFixed(2) + ")";
             }
             return text;
+        }
+
+        function labelFor(entityId) {
+            var match = _.find(self.configured(), function (entity) {
+                return entity.entity_id === entityId;
+            });
+            return (match && match.label) || entityId || "the printer";
         }
 
         // --- navbar ---------------------------------------------------------
@@ -100,7 +108,7 @@ $(function () {
         self.autoOffText = ko.pureComputed(function () {
             var info = self.autoOff() || {};
             if (info.state === "pending") {
-                return "Powering off " + (info.entity_id || "the printer") +
+                return "Powering off " + labelFor(info.entity_id) +
                     " in " + info.seconds_remaining + "s";
             }
             return info.detail || "";
@@ -219,8 +227,21 @@ $(function () {
 
         // --- settings -------------------------------------------------------
 
+        // Resolved once the settings viewmodel has its data, and referenced
+        // directly by the settings template. Reaching through
+        // `settings.settings.plugins.<id>` in every binding is unreadable and
+        // easy to get wrong.
+        self.pluginSettings = null;
+
+        self.onBeforeBinding = function () {
+            self.pluginSettings = self.settings.settings.plugins[PLUGIN_ID];
+            // Populate the editable rows before binding so the printer-entity
+            // dropdown has its options on the first pass.
+            self.loadEntityRows();
+        };
+
         function pluginSettings() {
-            return self.settings.settings.plugins[PLUGIN_ID];
+            return self.pluginSettings || self.settings.settings.plugins[PLUGIN_ID];
         }
 
         function makeRow(source) {
@@ -307,9 +328,13 @@ $(function () {
             });
         };
 
-        self.onSettingsShown = function () {
+        self.loadEntityRows = function () {
             var stored = ko.toJS(pluginSettings().entities) || [];
             self.entities(stored.map(makeRow));
+        };
+
+        self.onSettingsShown = function () {
+            self.loadEntityRows();
             self.testResult("");
         };
 
@@ -350,7 +375,7 @@ $(function () {
             }
 
             var text = info.state === "pending"
-                ? "Powering off " + (info.entity_id || "the printer") +
+                ? "Powering off " + labelFor(info.entity_id) +
                   " in " + info.seconds_remaining + "s."
                 : (info.detail || "Waiting for the printer to cool down.");
 
