@@ -73,6 +73,13 @@
     margin-bottom: 6px;
 }
 
+.ha-power-live {
+    margin-left: 5px;
+    font-size: 0.85em;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.85;
+}
+
 .ha-power-badge {
     margin-left: 4px;
     padding: 1px 5px;

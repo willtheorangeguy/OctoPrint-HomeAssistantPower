@@ -12,7 +12,7 @@ date: 2026-09-05
 
 homepage: https://github.com/willtheorangeguy/OctoPrint-HomeAssistantPower
 source: https://github.com/willtheorangeguy/OctoPrint-HomeAssistantPower
-archive: https://github.com/willtheorangeguy/OctoPrint-HomeAssistantPower/archive/v0.1.1.zip
+archive: https://github.com/willtheorangeguy/OctoPrint-HomeAssistantPower/archive/v0.1.2.zip
 
 tags:
 - power
@@ -24,8 +24,8 @@ tags:
 
 screenshots:
 - url: /assets/img/plugins/homeassistant_power/navbar.png
-  alt: The navbar dropdown listing three smart plugs with their states and live wattage
-  caption: Every configured entity gets a state dot, live wattage and on/off buttons.
+  alt: The navbar showing live wattage, with a dropdown listing three smart plugs
+  caption: The printer's live draw sits in the navbar; the dropdown controls every plug.
 - url: /assets/img/plugins/homeassistant_power/autooff.png
   alt: A countdown notification offering to keep the power on
   caption: A cancellable countdown runs before the printer is powered off.

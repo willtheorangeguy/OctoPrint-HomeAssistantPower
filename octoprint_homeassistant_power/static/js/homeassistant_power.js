@@ -124,6 +124,17 @@ $(function () {
             return formatPower(printerState().power_w);
         });
 
+        // Live draw for the printer plug, shown next to the navbar icon so it
+        // is readable without opening anything.
+        self.navbarPowerText = self.printerPowerText;
+
+        self.showNavbarPower = ko.pureComputed(function () {
+            var cfg = energySettings();
+            if (cfg.enabled === false || cfg.show_in_navbar === false) return false;
+            var watts = printerState().power_w;
+            return watts !== null && watts !== undefined;
+        });
+
         self.energyTracking = ko.pureComputed(function () {
             return !!(self.energy() || {}).tracking;
         });
@@ -148,12 +159,12 @@ $(function () {
                 state.cumulative === false;
         });
 
+        // Live watts now live in the navbar, so the panel is only worth showing
+        // when there is per-print energy to report.
         self.sidebarVisible = ko.pureComputed(function () {
             var cfg = energySettings();
             if (cfg.enabled === false || cfg.show_sidebar === false) return false;
-            var state = printerState();
-            return state.power_w !== null && state.power_w !== undefined ||
-                state.energy_kwh !== null && state.energy_kwh !== undefined;
+            return self.energyTracking() || !!self.lastPrintEnergy();
         });
 
         // --- API ------------------------------------------------------------

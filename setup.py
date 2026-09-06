@@ -3,7 +3,7 @@
 plugin_identifier = "homeassistant_power"
 plugin_package = "octoprint_homeassistant_power"
 plugin_name = "OctoPrint-HomeAssistantPower"
-plugin_version = "0.1.1"
+plugin_version = "0.1.2"
 plugin_description = (
     "Control Home Assistant smart plugs from OctoPrint: switch them from the "
     "navbar, power the printer down after a print once it has cooled, and see "

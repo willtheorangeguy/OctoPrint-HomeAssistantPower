@@ -20,9 +20,11 @@ reason to leave the OctoPrint tab.
   Nothing is switched while the printer is still hot with its fans dead.
 - **Power on and connect.** One button turns the printer plug on and retries the
   serial connection until the printer answers.
-- **Energy and cost.** If your plugs report power and energy, the dropdown shows
-  live wattage and a sidebar panel shows what the current print has used so far,
-  what the last one used, and optionally what it cost.
+- **Energy and cost.** If your plugs report power and energy, the printer's live
+  draw sits in the navbar itself where you can read it at a glance, each plug
+  shows its own draw in the dropdown, and a sidebar panel reports what the
+  current print has used so far, what the last one used, and optionally what it
+  cost.
 - **Any entity type.** The service domain is taken from the entity ID, so
   `switch.*`, `light.*` and `input_boolean.*` all work. That matters for Zigbee
   plugs, which land in different domains depending on whether you use ZHA,
@@ -33,8 +35,8 @@ reason to leave the OctoPrint tab.
 
 ## Screenshots
 
-Every configured entity gets a state dot, live wattage and on/off buttons in the
-navbar dropdown:
+The printer's live draw sits in the navbar itself; the dropdown gives every
+configured entity a state dot, its own draw and on/off buttons:
 
 ![The navbar dropdown listing three smart plugs with their states and live wattage](docs/img/navbar.png)
 
@@ -42,9 +44,9 @@ After a print, a cancellable countdown runs before the printer is powered off:
 
 ![A countdown in the navbar offering to cancel the power off](docs/img/autooff.png)
 
-The sidebar panel shows live draw and what the last print consumed:
+The sidebar panel reports what each print consumed:
 
-![The sidebar energy panel showing live watts and the last print's kWh](docs/img/sidebar.png)
+![The sidebar energy panel showing the last print's kWh and cost](docs/img/sidebar.png)
 
 Entities, automation and energy options all live in one settings pane:
 
@@ -66,7 +68,7 @@ Install via the bundled [Plugin Manager](https://docs.octoprint.org/en/master/bu
 or manually using this URL:
 
 ```
-https://github.com/willtheorangeguy/OctoPrint-HomeAssistantPower/archive/v0.1.1.zip
+https://github.com/willtheorangeguy/OctoPrint-HomeAssistantPower/archive/v0.1.2.zip
 ```
 
 ## Setup
