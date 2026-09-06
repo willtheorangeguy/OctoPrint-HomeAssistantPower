@@ -8,11 +8,11 @@ authors:
 - William Vandergraaf
 license: AGPLv3
 
-date: 2026-09-04
+date: 2026-09-05
 
 homepage: https://github.com/willtheorangeguy/OctoPrint-HomeAssistantPower
 source: https://github.com/willtheorangeguy/OctoPrint-HomeAssistantPower
-archive: https://github.com/willtheorangeguy/OctoPrint-HomeAssistantPower/archive/main.zip
+archive: https://github.com/willtheorangeguy/OctoPrint-HomeAssistantPower/archive/v0.1.0.zip
 
 tags:
 - power
