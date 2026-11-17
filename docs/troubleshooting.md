@@ -62,7 +62,7 @@ Check **Trigger on**, **Cancel window**, **Cool down to**, and **Cooldown timeou
 
 ## Development install cannot import OctoPrint's setuptools
 
-`Could not import OctoPrint's setuptools` comes from `setup.py` when `octoprint_setuptools` is unavailable. Install OctoPrint in the same active Python environment before the editable plugin install:
+`Could not import OctoPrint's setuptools` comes from the legacy `setup.py` in older plugin releases. The current checkout uses `pyproject.toml` and builds without importing OctoPrint. Update the checkout and install into OctoPrint's active Python environment:
 
 ```bash
 python -m pip install OctoPrint

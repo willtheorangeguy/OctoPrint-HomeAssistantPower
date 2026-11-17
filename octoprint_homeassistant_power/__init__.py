@@ -118,7 +118,7 @@ class HomeAssistantPowerPlugin(
 
     def is_template_autoescaped(self):
         # The templates emit no pre-rendered markup, so autoescaping is safe and
-        # is what OctoPrint 1.13 will enforce globally anyway.
+        # also works with OctoPrint 2.0's template handling.
         return True
 
     def get_template_configs(self):

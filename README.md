@@ -55,6 +55,8 @@ Entities, automation and energy options all live in one settings pane:
 ## Requirements
 
 - OctoPrint 1.5.0 or newer
+- OctoPrint 2.0 requires Python 3.9 or newer. Automated compatibility checks
+  cover OctoPrint 1.11.x and 2.0.0 on Python 3.9 and 3.12.
 - A reachable Home Assistant instance
 - A [long-lived access token](https://www.home-assistant.io/docs/authentication/#your-account-profile)
   from your Home Assistant profile page
@@ -141,6 +143,9 @@ automation without hardware.
 
 - Entity states are polled (default every 30s) rather than pushed. Home
   Assistant's WebSocket API would be nicer and is the obvious next step.
+- Automatic reconnection uses the serial connector, including on OctoPrint 2.0.
+  For another connector, disable **Connect to the printer after powering it on**
+  and connect from OctoPrint's Connection panel.
 - Per-print energy needs a cumulative energy sensor
   (`state_class: total_increasing`). A plain instantaneous power sensor gives
   you the live wattage but no per-print totals.
