@@ -10,6 +10,7 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.9", "3.12"]
+        octoprint-version: [">=1.11,<2", "==2.0.0"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -18,8 +19,9 @@ jobs:
       - name: Install OctoPrint and the plugin
         run: |
           python -m pip install --upgrade pip
-          python -m pip install OctoPrint
-          # setup.py imports OctoPrint's build helpers.
-          python -m pip install --no-build-isolation -e ".[develop]"
+          python -m pip install "OctoPrint${{ matrix.octoprint-version }}"
+          python -m pip install -e ".[develop]"
+          python -m pip wheel --no-deps . --wheel-dir dist
+          python -m pip install --force-reinstall --no-deps dist/*.whl
       - name: Run tests
         run: python -m pytest

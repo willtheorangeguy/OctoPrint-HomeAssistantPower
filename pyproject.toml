@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "OctoPrint-HomeAssistantPower"
+version = "0.1.2"
+description = "Control Home Assistant smart plugs from OctoPrint: switch them from the navbar, power the printer down after a print once it has cooled, and see how much energy each print used."
+requires-python = ">=3.7,<4"
+license = {text = "AGPLv3"}
+authors = [{name = "William Vandergraaf", email = "willtheorangeguy@outlook.com"}]
+dependencies = ["OctoPrint>=1.5.0"]
+
+[project.urls]
+Homepage = "https://github.com/willtheorangeguy/OctoPrint-HomeAssistantPower"
+
+[project.optional-dependencies]
+develop = ["pytest>=7", "requests-mock>=1.10"]
+
+[project.entry-points."octoprint.plugin"]
+homeassistant_power = "octoprint_homeassistant_power"
+
+[tool.setuptools]
+packages = ["octoprint_homeassistant_power"]
+zip-safe = false
+
+[tool.setuptools.package-data]
+octoprint_homeassistant_power = ["templates/*.jinja2", "static/js/*.js", "static/css/*.css"]

@@ -62,7 +62,8 @@ tests/             HTTP mocks, automation fakes, and energy tests
 docs/              MkDocs content and existing screenshots
 scripts/           Deployment helper and documentation preview scripts
 .github/workflows/ Plugin tests and shared documentation workflow callers
-setup.py           Plugin metadata and packaging
+pyproject.toml     Plugin metadata, build configuration, and packaged assets
+setup.py           Compatibility entry point for setuptools
 mkdocs.yml         Shared theme inheritance and site navigation
 ```
 

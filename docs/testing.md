@@ -10,6 +10,16 @@ After the [development setup](development.md), run in the activated environment:
 python -m pytest
 ```
 
+The asset packaging test is skipped for editable installations. Build and install the wheel to include this check:
+
+```bash
+python -m pip wheel --no-deps . --wheel-dir dist
+python -m pip install --force-reinstall --no-deps dist/octoprint_homeassistantpower-0.1.2-py3-none-any.whl
+python -m pytest
+```
+
+CI runs against OctoPrint 1.11.x and 2.0.0 on Python 3.9 and 3.12. The entry-point check loads the installed plugin against the selected OctoPrint version. The asset check verifies that the wheel includes the templates, JavaScript, and CSS.
+
 `pytest.ini` sets `testpaths = tests`. Run a focused file when modifying a component:
 
 ```bash
@@ -25,6 +35,7 @@ python -m pytest tests/test_energy.py
 | `test_ha_client.py` | Domain selection, bearer authentication, service requests, error mapping, token omission from errors, configuration matching, state indexing, API greeting. |
 | `test_automation.py` | Grace period, cooldown, bed inclusion, timeout proceeding with shutdown, cancellation, new-print abort, notifications, missing temperatures, power-off failure. |
 | `test_energy.py` | Units, invalid readings, cumulative classification, sensor detection, meter differences, reset rejection, persistence, corrupt history, abandoning an active measurement. |
+| `test_packaging.py` | Installed plugin entry point, OctoPrint mixins and permission hook, API protection, template escaping, and frontend assets in the wheel. |
 
 The suite does not provide browser tests, end-to-end Simple API permission tests, or direct `PowerOnController` tests. A passing suite does not prove real serial reconnection or physical cutoff timing.
 

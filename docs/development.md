@@ -3,7 +3,7 @@
 <!-- markdownlint-disable MD046 -->
 <!-- Material content tabs require indentation around fenced code blocks. -->
 
-Install OctoPrint before installing this plugin: `setup.py` imports `octoprint_setuptools` from the OctoPrint environment.
+Package metadata and frontend assets are declared in `pyproject.toml`. Builds use isolated setuptools and do not import OctoPrint. Install into the environment that runs OctoPrint.
 
 ## Set up a checkout
 
@@ -32,7 +32,7 @@ Use Python 3.12 to match one of the existing CI jobs.
     .venv/bin/python -m pytest
     ```
 
-The `develop` extra installs `pytest>=7` and `requests-mock>=1.10`. Runtime requirements remain supplied by OctoPrint. See [Testing](testing.md) for focused runs and the limits of the automated suite.
+The `develop` extra installs `pytest>=7` and `requests-mock>=1.10`. Runtime requirements remain supplied by OctoPrint. The packaging tests require a wheel installation; see [Testing](testing.md) for the commands and the limits of the automated suite.
 
 ## Exercise the interface
 

@@ -6,7 +6,7 @@ Plugin tests run in this repository. Documentation build, lint, and deployment l
 
 | Workflow | Trigger | Result |
 | --- | --- | --- |
-| `test.yml` | Pushes and pull requests | Install OctoPrint and the plugin's `develop` extra, then run pytest on Python 3.9 and 3.12. |
+| `test.yml` | Pushes and pull requests | Build and install the plugin wheel, then run pytest against OctoPrint 1.11.x and 2.0.0 on Python 3.9 and 3.12. |
 | `docs-lint.yml` | Pull requests touching docs, source used by the Python reference, site configuration, included license, or documentation helpers; manual dispatch | Shared Markdown lint, strict MkDocs build, and external link check. Does not deploy. |
 | `docs.yml` | Relevant changes on `main` or `master`; manual dispatch | Shared build and GitHub Pages deployment. |
 
